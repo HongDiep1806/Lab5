@@ -3,11 +3,24 @@ import { View, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
 // import { Icon, MD3Colors } from 'react-native-paper';
 import { TextInput } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-const LoginScreen = () => {
+import { login } from '../services/serviceAPIs';
+const LoginScreen = ({navigation}) => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const handleLogin = async () => {
+      const result = await login(userName, password);
+      if(result.error){
+        alert(result.message);
+      }
+      else{
+        alert('Login successful!');
+        navigation.replace('Home')
+      }
+    
+
+
+  }
   return (
     <View style={styles.container}>
       <View style={styles.loginContainer}>
@@ -34,6 +47,7 @@ const LoginScreen = () => {
             outlineColor="#c6c6c6"
             activeOutlineColor="#f3417ccf"
             theme={{ colors: { primary: '#f3417cff' } }}
+            onChangeText={setPassword}
             right={
               <TextInput.Icon
                 icon={() => (
@@ -49,7 +63,7 @@ const LoginScreen = () => {
           />
         </View>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleLogin}>
           <Text style={styles.button}>Login</Text>
         </TouchableOpacity>
       </View>
